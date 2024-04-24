@@ -2,8 +2,8 @@ from model import MouthSegmentationModel
 
 import cv2
 
-image1 = cv2.imread("dark_photo.jpg", cv2.IMREAD_COLOR)
-image2 = cv2.imread("dark_photo.jpg", cv2.IMREAD_COLOR)
+image1 = cv2.imread("examples/dark_photo.jpg", cv2.IMREAD_COLOR)
+image2 = cv2.imread("examples/dark_photo.jpg", cv2.IMREAD_COLOR)
 
 resized_image1 = cv2.resize(image1, (320, 320))
 resized_image2 = cv2.resize(image2, (320, 320))
