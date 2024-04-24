@@ -80,8 +80,7 @@ class ColorAnalysisModel:
         try:
             return sorted(answers.items(), key=lambda x: -x[1])[0][0]
         except IndexError:
-            return ("Probably, you are trying to analyze two photos of different people or some of your photos were "
-                    "taken in bad conditions -> choose another photos or take new ones")
+            return "Error"
 
     def get_color(self, photo):
         def calculate_delta(color1, color2):
@@ -151,6 +150,8 @@ class APIController:
             return "Upload different pictures, please", 400
         if number == COLOR:
             color_result = self.analysis_service.analyze_color(photo)
+            if color_result == "Error":
+                return "Probably, you are trying to analyze two photos of different people or some of your photos were taken in bad conditions -> choose another photos or take new ones", 400
             return str(color_result), 201
         else:
             bite_result = self.analysis_service.analyze_bite(photo)

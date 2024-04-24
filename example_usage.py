@@ -1,7 +1,7 @@
 import base64
 import requests
-image1 = "1.jpg"
-image2 = "2.jpg"
+image1 = "examples/golden_tooth.jpg"
+image2 = "examples/2.jpg"
 with open(image1, "rb") as img:
     string1 = base64.b64encode(img.read()).decode('utf-8')
 with open(image2, "rb") as img:
