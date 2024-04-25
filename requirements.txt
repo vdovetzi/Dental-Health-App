@@ -6,3 +6,4 @@ opencv_python_headless==4.8.0.74
 Requests==2.31.0
 tensorflow==2.16.1
 ultralytics==8.1.47
+gdown~=5.1.0

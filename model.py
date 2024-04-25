@@ -4,6 +4,7 @@ from ultralytics import YOLO, FastSAM
 from ultralytics.models.fastsam import FastSAMPrompt
 import os
 import shutil
+import gdown
 
 MIN_CONF = 0.5
 CLASSES = ['C Lower', 'C Upper', 'CI Lower', 'CI Upper', 'LI Lower', 'LI Upper', 'M1 Lower', 'M1 Upper', 'M2 Lower',
@@ -24,12 +25,13 @@ class MouthSegmentationModel:
         """
         Initializes the MouthSegmentationModel.
         """
-        self.model_detect = YOLO('weights/detect/best.pt')
+        self.download_models()
+        self.model_detect = YOLO('best.pt')
         # Select FastSAM model based on system cores count
         if cv2.getNumberOfCPUs() > NUM_CPUS:
-            self.model_segment = FastSAM('weights/segment/FastSAM-x.pt')
+            self.model_segment = FastSAM('FastSAM-x.pt')
         else:
-            self.model_segment = FastSAM('weights/segment/FastSAM-s.pt')
+            self.model_segment = FastSAM('FastSAM-s.pt')
 
     def get_teeth_from_photo(self, result_of_detection, image, save_segmentation_result=False, path=None):
         """
@@ -81,6 +83,28 @@ class MouthSegmentationModel:
         cv2.fillPoly(binary_mask, contours, 255)
         masked_image = cv2.bitwise_and(image, image, mask=binary_mask)
         return masked_image
+
+    def download_models(self):
+        """
+        Downloads pre-trained models if they don't already exist in the current directory.
+
+        This function checks if the files 'best.pt', 'FastSAM-s.pt', and 'FastSAM-x.pt'
+        exist in the current directory. If any of these files are missing, it downloads
+        them from their respective Google Drive IDs using the gdown library and saves
+        them in the current directory.
+
+        Parameters:
+            self: The instance of the class containing this method.
+
+        Returns:
+            None
+        """
+        if not (os.path.exists('best.pt')):
+            gdown.download(id='1qxSN8J1pELFHFWI-dLfjc9VakYfrOz9z', output='best.pt')
+        if not (os.path.exists('FastSAM-s.pt')):
+            gdown.download(id='1XKF3W7JLCUclwq_0sk9t0KC4snVXHUsi', output='FastSAM-s.pt')
+        if not (os.path.exists('FastSAM-x.pt')):
+            gdown.download(id='1eW3B0swPUd2W7lfOEtMfhPVDJEzy5LYA', output='FastSAM-x.pt')
 
     def predict(self, source, save_detection_result=False, save_segmentation_result=False, path=None):
         """
